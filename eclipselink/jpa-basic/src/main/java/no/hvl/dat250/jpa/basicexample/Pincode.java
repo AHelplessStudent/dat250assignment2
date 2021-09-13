@@ -40,6 +40,6 @@ public class Pincode {
 
     @Override
     public String toString() {
-        return "Pincode [pincode=" + pincode + ", id=" + id + ", count="+count+" ]";
+        return String.format("Pincode [ id = %d, pincode = %s, count = %d ]", id,pincode, count);
     }
 }

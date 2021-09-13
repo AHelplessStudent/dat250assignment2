@@ -2,6 +2,7 @@ package no.hvl.dat250.jpa.basicexample;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,18 +13,19 @@ public class Person {
     private Long id;
     private String name;
 
-    @ManyToMany
-    private List<Address> addresses;
+    // Chose to not specify the names for the connecting table.
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    private Collection<Address> addresses = new ArrayList<>();
 
-    @OneToMany
-    private List<CreditCard> creditCards;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<CreditCard> creditCards = new ArrayList<>();
 
-    public void setCreditCards(List<CreditCard> cards) {
-        this.creditCards = cards;
+    public void setAddresses(Collection<Address> addresses) {
+        this.addresses = addresses;
     }
 
-    public List<CreditCard> getCreditCards() {
-        return creditCards;
+    public Collection<Address> getAddresses() {
+        return addresses;
     }
 
     public Long getId() {
@@ -42,17 +44,29 @@ public class Person {
         this.name = name;
     }
 
-
-    public List<Address> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
-    }
-
     @Override
     public String toString() {
-        return "Person [name=" + name +", Adreesesss"+ addresses.size() +", Creditcards" + creditCards.size() + ", id=" + id + "]";
+
+        StringBuilder adds = new StringBuilder();
+        for (Address a : addresses) {
+            adds.append(a.getStreet()).append(",");
+        }
+
+        StringBuilder cards = new StringBuilder();
+        for (CreditCard c : creditCards) {
+            cards.append(c.getNumber()).append(",");
+        }
+
+        return String.format("Person : [ id = %d, name = %s, Addresses = [%s], CreditCards = [%s] ]", id, name, adds, cards);
+
+    }
+
+
+    public Collection<CreditCard> getCreditCards() {
+        return creditCards;
+    }
+
+    public void setCreditCards(Collection<CreditCard> creditCards) {
+        this.creditCards = creditCards;
     }
 }

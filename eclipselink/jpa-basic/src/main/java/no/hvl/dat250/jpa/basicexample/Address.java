@@ -2,6 +2,7 @@ package no.hvl.dat250.jpa.basicexample;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -12,8 +13,16 @@ public class Address {
     private String street;
     private int number;
 
-    @ManyToMany
-    private List<Person> people = new ArrayList<Person>();
+    @ManyToMany(mappedBy = "addresses")
+    private Collection<Person> people = new ArrayList<>();
+
+    public void setPeople(Collection<Person> people) {
+        this.people = people;
+    }
+
+    public Collection<Person> getPeople() {
+        return people;
+    }
 
     public String getStreet() {
         return street;
@@ -31,20 +40,19 @@ public class Address {
         this.number = number;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
     }
 
-    public List<Person> getPeople() {
-        return people;
-    }
 
     @Override
     public String toString() {
-        return "Address [street=" + street + ", id=" + id + ", number="+number+"]";
+        StringBuilder peepz = new StringBuilder();
+        for (Person p : people) {
+            peepz.append(p.getName()).append(",");
+        }
+        return String.format("Address [ People = [%s], street = %s, number = %d, id = %d ]", peepz, street, number, id);
     }
+
+
 }

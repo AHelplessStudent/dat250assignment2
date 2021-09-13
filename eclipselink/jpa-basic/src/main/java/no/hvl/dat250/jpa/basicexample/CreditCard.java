@@ -11,13 +11,11 @@ public class CreditCard {
     private int limit;
     private int balance;
 
-
-    // Relation between Bank and CreditCards
-    @ManyToOne
-    private Bank bank;
-
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     private Pincode pincode;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Bank bank;
 
     public Long getId() {
         return id;
@@ -51,12 +49,11 @@ public class CreditCard {
         this.balance = balance;
     }
 
-    public Bank getBank() {
-        return bank;
-    }
 
-    public void setBank(Bank bank) {
-        this.bank = bank;
+
+    @Override
+    public String toString() {
+        return String.format("CreditCard [ id=%d, number=%d, limit=%d, Balance=%d ]", id, number, limit, balance);
     }
 
     public Pincode getPincode() {
@@ -67,9 +64,11 @@ public class CreditCard {
         this.pincode = pincode;
     }
 
-    @Override
-    public String toString() {
-        return "Address [number=" + number  + ", id=" + id + ", limit="+limit+", Balance="+ balance +", Bank=" + bank +" ]";
+    public Bank getBank() {
+        return bank;
     }
 
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
 }

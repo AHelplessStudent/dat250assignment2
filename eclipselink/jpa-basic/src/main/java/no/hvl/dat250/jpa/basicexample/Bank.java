@@ -2,6 +2,7 @@ package no.hvl.dat250.jpa.basicexample;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,7 @@ public class Bank {
 
     // Relation between Bank and CreditCards
     @OneToMany
-    private List<CreditCard> creditCards = new ArrayList<CreditCard>();
+    private Collection<CreditCard> creditCards = new ArrayList<CreditCard>();
 
     public Long getId() {
         return id;
@@ -31,16 +32,22 @@ public class Bank {
         this.name = name;
     }
 
-    public List<CreditCard> getCreditCards() {
+    public Collection<CreditCard> getCreditCards() {
         return creditCards;
     }
 
-    public void setCreditCards(List<CreditCard> creditCards) {
+    public void setCreditCards(Collection<CreditCard> creditCards) {
         this.creditCards = creditCards;
     }
 
     @Override
     public String toString() {
-        return "Bank [name=" + name + ", id=" + id + ", Creditcards"+ creditCards.get(0) +"]";
+        StringBuilder cards = new StringBuilder();
+
+        for (CreditCard a : creditCards) {
+            cards.append(a.getNumber()).append(",");
+        }
+
+        return String.format("Bank [ id = %d, name = %s, CreditCards [ %s] ]", id, name, cards);
     }
 }
